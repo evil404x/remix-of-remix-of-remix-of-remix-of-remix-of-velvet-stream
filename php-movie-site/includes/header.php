@@ -1,45 +1,47 @@
 <?php
 require_once dirname(__DIR__) . '/config.php';
 require_once __DIR__ . '/functions.php';
+
+// Load site name from settings
+$dynamicSiteName = SITE_NAME;
+try {
+    $snStmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = 'site_name'");
+    $snStmt->execute();
+    $dbSiteName = $snStmt->fetchColumn();
+    if ($dbSiteName && !empty(trim($dbSiteName))) {
+        $dynamicSiteName = $dbSiteName;
+    }
+} catch (Exception $e) {}
 ?>
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title><?= SITE_NAME ?> - بەهێزترین وێبسایتی فیلم</title>
+    <title><?= clean($dynamicSiteName) ?> - بەهێزترین وێبسایتی فیلم</title>
     <meta name="description" content="باشترین وێبسایتی فیلم و زنجیرە بە کوالیتیی بەرز و سێ زمان: کوردی، عەرەبی، ئینگلیزی">
     <link rel="stylesheet" href="<?= SITE_URL ?>/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script>window.SITE_URL = '<?= SITE_URL ?>';</script>
     <script>
-    // Auto cache clear - version-based
     (function(){
         var CACHE_VERSION = '<?= filemtime(__DIR__ . '/../assets/css/style.css') . filemtime(__DIR__ . '/../assets/js/main.js') ?>';
         var storedVersion = localStorage.getItem('cg_cache_v');
         if (storedVersion && storedVersion !== CACHE_VERSION) {
-            // Clear caches
-            if ('caches' in window) {
-                caches.keys().then(function(names) {
-                    names.forEach(function(name) { caches.delete(name); });
-                });
-            }
-            // Force reload CSS/JS by appending version
+            if ('caches' in window) { caches.keys().then(function(names) { names.forEach(function(name) { caches.delete(name); }); }); }
             localStorage.setItem('cg_cache_v', CACHE_VERSION);
             location.reload(true);
-        } else if (!storedVersion) {
-            localStorage.setItem('cg_cache_v', CACHE_VERSION);
-        }
+        } else if (!storedVersion) { localStorage.setItem('cg_cache_v', CACHE_VERSION); }
     })();
     </script>
 </head>
 <body class="rtl">
 
-<!-- Preloader - Custom Heartbeat Pulse -->
+<!-- Preloader -->
 <div class="preloader">
     <div class="preloader-content">
-        <div class="preloader-logo shah-pulse">🎬 <?= SITE_NAME ?></div>
+        <div class="preloader-logo shah-pulse">🎬 <?= clean($dynamicSiteName) ?></div>
         <div class="preloader-spinner"></div>
         <div class="preloader-bar"></div>
     </div>
@@ -56,14 +58,12 @@ require_once __DIR__ . '/functions.php';
         <h3>Inbox <span class="inbox-online-dot"></span></h3>
         <button class="inbox-search-btn" id="inbox-search-toggle"><i class="fas fa-search"></i></button>
     </div>
-    <!-- Category Tabs -->
     <div class="inbox-category-tabs">
         <button class="inbox-cat-tab active" data-inbox-cat="all"><span>هەموو</span></button>
         <button class="inbox-cat-tab" data-inbox-cat="followers"><i class="fas fa-user-plus"></i><span>فۆڵۆوەر</span></button>
         <button class="inbox-cat-tab" data-inbox-cat="invites"><i class="fas fa-film"></i><span>بانگهێشت</span></button>
         <button class="inbox-cat-tab" data-inbox-cat="messages"><i class="fas fa-envelope"></i><span>نامەکان</span></button>
     </div>
-    <!-- Unified Feed -->
     <div class="inbox-overlay-body" id="inbox-feed">
         <div class="inbox-loading"><i class="fas fa-spinner fa-spin"></i></div>
     </div>
@@ -90,7 +90,7 @@ require_once __DIR__ . '/functions.php';
 <!-- Navbar -->
 <nav class="navbar glass">
     <div class="nav-container">
-        <a href="<?= SITE_URL ?>" class="nav-logo">🎬 <?= SITE_NAME ?></a>
+        <a href="<?= SITE_URL ?>" class="nav-logo">🎬 <?= clean($dynamicSiteName) ?></a>
         
         <ul class="nav-links">
             <li><a href="<?= SITE_URL ?>"><i class="fas fa-home"></i> سەرەتا</a></li>
@@ -116,32 +116,12 @@ require_once __DIR__ . '/functions.php';
         
         <div class="nav-user">
             <?php if (isLoggedIn()): ?>
-                <!-- Smart Hub Icons -->
                 <div class="smart-hub nav-desktop-only">
-                    <!-- User Search -->
-                    <button class="smart-hub-btn" id="global-user-search-btn" title="گەڕانی بەکارهێنەر">
-                        <i class="fas fa-user-plus"></i>
-                    </button>
-                    
-                    <!-- Followers Badge -->
-                    <button class="smart-hub-btn" id="hub-followers-btn" title="فۆڵۆوەرە نوێیەکان">
-                        <i class="fas fa-user-friends"></i>
-                        <span class="smart-hub-badge" id="hub-followers-badge" style="display:none;">0</span>
-                    </button>
-                    
-                    <!-- Messages Badge -->
-                    <a href="<?= SITE_URL ?>/messages.php" class="smart-hub-btn" id="hub-messages-btn" title="نامەکان">
-                        <i class="fas fa-envelope"></i>
-                        <span class="smart-hub-badge" id="hub-messages-badge" style="display:none;">0</span>
-                    </a>
-                    
-                    <!-- Notifications/Inbox Badge -->
-                    <button class="smart-hub-btn" id="hub-notif-btn" title="ئاگادارکردنەوەکان">
-                        <i class="fas fa-bell"></i>
-                        <span class="smart-hub-badge" id="hub-notif-badge" style="display:none;">0</span>
-                    </button>
+                    <button class="smart-hub-btn" id="global-user-search-btn" title="گەڕانی بەکارهێنەر"><i class="fas fa-user-plus"></i></button>
+                    <button class="smart-hub-btn" id="hub-followers-btn" title="فۆڵۆوەرە نوێیەکان"><i class="fas fa-user-friends"></i><span class="smart-hub-badge" id="hub-followers-badge" style="display:none;">0</span></button>
+                    <a href="<?= SITE_URL ?>/messages.php" class="smart-hub-btn" id="hub-messages-btn" title="نامەکان"><i class="fas fa-envelope"></i><span class="smart-hub-badge" id="hub-messages-badge" style="display:none;">0</span></a>
+                    <button class="smart-hub-btn" id="hub-notif-btn" title="ئاگادارکردنەوەکان"><i class="fas fa-bell"></i><span class="smart-hub-badge" id="hub-notif-badge" style="display:none;">0</span></button>
                 </div>
-
                 <a href="<?= SITE_URL ?>/profile.php" class="btn btn-glass btn-sm nav-desktop-only" title="پرۆفایل"><i class="fas fa-user-circle"></i></a>
                 <a href="<?= SITE_URL ?>/favorites.php" class="btn btn-glass btn-sm nav-desktop-only"><i class="fas fa-heart"></i></a>
                 <?php if (isAdmin()): ?>
@@ -157,7 +137,7 @@ require_once __DIR__ . '/functions.php';
 </nav>
 
 <?php if (isLoggedIn()): ?>
-<!-- Mobile Bottom Bar (Smart Hub for Mobile) -->
+<!-- Mobile Bottom Bar -->
 <div class="mobile-bottom-bar">
     <a href="<?= SITE_URL ?>" class="mobile-bar-item"><i class="fas fa-home"></i><span>سەرەتا</span></a>
     <button class="mobile-bar-item" id="mobile-user-search-btn"><i class="fas fa-user-plus"></i><span>گەڕان</span></button>

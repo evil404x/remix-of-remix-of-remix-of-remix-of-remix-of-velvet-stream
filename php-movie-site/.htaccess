@@ -20,10 +20,10 @@ RewriteRule ^setup\.sql$ - [F,L]
 RewriteRule ^create-admin\.php$ - [F,L]
 
 # ============ CLEAN URLs ============
-# movie/movie-slug -> movie.php?slug=movie-slug
+# movie/movie-slug -> movie.php?slug=movie-slug (allow unicode/special chars in slug)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^movie/([a-zA-Z0-9_-]+)/?$ movie.php?slug=$1 [L,QSA]
+RewriteRule ^movie/([^/]+)/?$ movie.php?slug=$1 [L,QSA]
 
 # actor/actor-name -> actor.php?name=actor-name
 RewriteCond %{REQUEST_FILENAME} !-f
