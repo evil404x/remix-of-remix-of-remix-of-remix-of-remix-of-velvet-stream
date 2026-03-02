@@ -2056,6 +2056,14 @@ body.rtl .footer-col ul li a:hover { transform: translateX(3px); }
     min-height: 100vh;
 }
 
+.admin-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 101;
+    display: none;
+}
+
 .admin-sidebar {
     background: rgba(10,10,10,0.8);
     backdrop-filter: blur(20px);
@@ -2070,6 +2078,7 @@ body.rtl .footer-col ul li a:hover { transform: translateX(3px); }
     z-index: 100;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease;
 }
 
 body.rtl .admin-sidebar { right: 0; left: auto; border-left: 1px solid var(--glass-border); border-right: none; }

@@ -6,7 +6,22 @@ $slug = clean($_GET['slug'] ?? '');
 if (!$slug) { header('Location: ' . SITE_URL); exit; }
 
 $movie = getMovie($pdo, $slug);
-if (!$movie) { header('Location: ' . SITE_URL); exit; }
+if (!$movie) {
+    // Try URL-decoded slug
+    $decodedSlug = clean(urldecode($_GET['slug'] ?? ''));
+    $movie = getMovie($pdo, $decodedSlug);
+    if (!$movie) {
+        // Try searching by similar slug
+        $likeStmt = $pdo->prepare("SELECT * FROM movies WHERE slug LIKE ? AND status = 'published' LIMIT 1");
+        $likeStmt->execute(['%' . $slug . '%']);
+        $movie = $likeStmt->fetch();
+        if (!$movie) {
+            header('HTTP/1.0 404 Not Found');
+            header('Location: ' . SITE_URL . '/404.php');
+            exit;
+        }
+    }
+}
 
 // Increment views & history
 incrementViews($pdo, $movie['id']);

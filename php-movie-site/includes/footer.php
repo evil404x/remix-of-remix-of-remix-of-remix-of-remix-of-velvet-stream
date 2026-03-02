@@ -2,17 +2,19 @@
 // Load dynamic footer settings
 $footerSettings = [];
 try {
-    $fStmt = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('footer_text','copyright_text','facebook_url','twitter_url','instagram_url','telegram_url','youtube_url','contact_email')");
+    $fStmt = $pdo->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('footer_text','copyright_text','facebook_url','twitter_url','instagram_url','telegram_url','youtube_url','contact_email','site_name')");
     foreach ($fStmt->fetchAll() as $row) { $footerSettings[$row['setting_key']] = $row['setting_value']; }
 } catch (Exception $e) {}
-$footerCopyright = $footerSettings['copyright_text'] ?? ('&copy; ' . date('Y') . ' ' . SITE_NAME . '. هەموو مافەکان پارێزراون. ✨');
+
+$dynamicSiteNameFooter = !empty($footerSettings['site_name']) ? $footerSettings['site_name'] : SITE_NAME;
+$footerCopyright = $footerSettings['copyright_text'] ?? ('&copy; ' . date('Y') . ' ' . $dynamicSiteNameFooter . '. هەموو مافەکان پارێزراون. ✨');
 $footerCustomText = $footerSettings['footer_text'] ?? 'باشترین وێبسایتی فیلم و زنجیرە بە کوالیتیی بەرز و سێ زمانی جیاواز.';
 ?>
 <!-- Footer -->
 <footer class="footer">
     <div class="footer-content">
         <div class="footer-col">
-            <h4>🎬 <?= SITE_NAME ?></h4>
+            <h4>🎬 <?= clean($dynamicSiteNameFooter) ?></h4>
             <p style="color: var(--gray); font-size: 0.88rem; line-height: 1.9;">
                 <?= clean($footerCustomText) ?>
             </p>
