@@ -1,0 +1,31 @@
+# ============ PREVENT EXECUTION OF ANY SCRIPTS IN UPLOADS ============
+# This blocks PHP, JS, CGI, and other executable files from running
+
+# Disable PHP execution
+<FilesMatch "\.(php|phtml|php3|php4|php5|php7|phps|phar|cgi|pl|py|jsp|asp|aspx|sh|bash|exe|com|bat|cmd|js|htaccess|htpasswd|ini|log|sql|conf|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Disable script execution via handler
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Allow image and video files
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico|bmp|mp4|webm|mov|avi)$">
+    Order Deny,Allow
+    Allow from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes -ExecCGI
+
+# Remove handlers
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .phps .phar .cgi .pl .py
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .phps .phar .cgi .pl .py
+
+# Force download for non-image files (extra safety)
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>

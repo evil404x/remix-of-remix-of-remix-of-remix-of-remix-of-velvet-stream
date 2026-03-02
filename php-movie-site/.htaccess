@@ -1,0 +1,45 @@
+RewriteEngine On
+
+# ============ Dynamic RewriteBase ============
+# Works whether site is at root or in a subdirectory
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)(.+)::\2$
+RewriteRule ^(.*) - [E=BASE:%1]
+
+# ============ SECURITY: Block suspicious URL patterns ============
+# Block SQL injection attempts in URL path
+RewriteCond %{THE_REQUEST} (union|select|insert|delete|drop|update|benchmark|sleep|load_file|outfile) [NC]
+RewriteRule .* 404.php [L]
+
+# Block path traversal
+RewriteCond %{THE_REQUEST} (\.\.\/|\.\.\\|%2e%2e|etc/passwd|proc/self) [NC]
+RewriteRule .* 404.php [L]
+
+# Block access to sensitive files
+RewriteRule ^config\.php$ - [F,L]
+RewriteRule ^setup\.sql$ - [F,L]
+RewriteRule ^create-admin\.php$ - [F,L]
+
+# ============ CLEAN URLs ============
+# movie/movie-slug -> movie.php?slug=movie-slug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^movie/([a-zA-Z0-9_-]+)/?$ movie.php?slug=$1 [L,QSA]
+
+# actor/actor-name -> actor.php?name=actor-name
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^actor/([^/]+)/?$ actor.php?name=$1 [L,QSA]
+
+# ============ 404 HANDLER ============
+ErrorDocument 404 /php-movie-site/404.php
+
+# ============ SECURITY HEADERS ============
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ============ PREVENT DIRECTORY LISTING ============
+Options -Indexes
