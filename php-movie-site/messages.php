@@ -540,38 +540,12 @@ setInterval(() => {
 // DM Sticker Picker
 const dmStickerBtn = document.getElementById('dm-sticker-btn');
 const dmStickerPicker = document.getElementById('dm-sticker-picker');
-const dmStickerGrid = document.getElementById('dm-sticker-grid');
-let dmStickersLoaded = false;
-if (dmStickerBtn) {
-    dmStickerBtn.addEventListener('click', function() {
-        dmStickerPicker.style.display = dmStickerPicker.style.display === 'none' ? 'block' : 'none';
-        if (!dmStickersLoaded) {
-            fetch(`${window.SITE_URL}/api/sticker.php?action=list`, {credentials:'same-origin'})
-                .then(r=>r.json()).then(d => {
-                    dmStickersLoaded = true;
-                    if (!d.stickers || d.stickers.length === 0) {
-                        dmStickerGrid.innerHTML = '<p style="color:var(--gray);font-size:0.8rem;text-align:center;grid-column:1/-1;padding:20px;">هیچ ستیکەرێک نییە</p>';
-                        return;
-                    }
-                    dmStickerGrid.innerHTML = d.stickers.map(s => {
-                        const isWebm = s.file_name.endsWith('.webm');
-                        if (isWebm) {
-                            return `<video src="${window.SITE_URL}/uploads/stickers/${s.file_name}" title="${s.name}" autoplay loop muted playsinline
-                                 style="width:70px;height:70px;object-fit:contain;cursor:pointer;border-radius:8px;padding:4px;"
-                                 onmouseover="this.style.background='rgba(245,197,24,0.1)';this.style.transform='scale(1.15)'"
-                                 onmouseout="this.style.background='';this.style.transform=''"
-                                 onclick="sendDmSticker('${s.file_name}')"></video>`;
-                        }
-                        return `<img src="${window.SITE_URL}/uploads/stickers/${s.file_name}" alt="${s.name}" title="${s.name}"
-                             style="width:70px;height:70px;object-fit:contain;cursor:pointer;border-radius:8px;padding:4px;"
-                             onmouseover="this.style.background='rgba(245,197,24,0.1)';this.style.transform='scale(1.15)'"
-                             onmouseout="this.style.background='';this.style.transform=''"
-                             onclick="sendDmSticker('${s.file_name}')">`;
-                    }).join('');
-                });
-        }
+if (dmStickerBtn && dmStickerPicker && window.CineStickers) {
+    CineStickers.attach({
+        btn: dmStickerBtn,
+        picker: dmStickerPicker,
+        onSelect: file => sendDmSticker(file)
     });
-    document.addEventListener('click', e => { if (!e.target.closest('#dm-sticker-picker') && !e.target.closest('#dm-sticker-btn')) dmStickerPicker.style.display = 'none'; });
 }
 
 function sendDmSticker(fileName) {
