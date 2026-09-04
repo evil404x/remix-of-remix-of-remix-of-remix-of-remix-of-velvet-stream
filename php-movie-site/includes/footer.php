@@ -83,5 +83,9 @@ if (!empty($popupAds)):
 <?php endif; ?>
 
 <script src="<?= SITE_URL ?>/assets/js/main.js?v=<?= filemtime(__DIR__ . '/../assets/js/main.js') ?>"></script>
+<script src="<?= SITE_URL ?>/assets/js/stickers.js?v=<?= filemtime(__DIR__ . '/../assets/js/stickers.js') ?>"></script>
+<?php if (isLoggedIn()): ?>
+<script src="<?= SITE_URL ?>/assets/js/chat-popup.js?v=<?= filemtime(__DIR__ . '/../assets/js/chat-popup.js') ?>"></script>
+<?php endif; ?>
 </body>
 </html>
