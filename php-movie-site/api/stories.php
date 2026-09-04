@@ -262,6 +262,41 @@ switch ($action) {
         echo json_encode(['success' => true, 'viewers' => $stmt->fetchAll()]);
         break;
 
+    case 'feed':
+        // All users with active stories (me first, then followed users, then the rest)
+        $q = trim($_GET['q'] ?? '');
+        $params = [$userId, $userId, $userId];
+        $where = '';
+        if ($q !== '') {
+            $where = " AND (u.username LIKE ? OR u.full_name LIKE ?) ";
+            $params[] = '%' . $q . '%';
+            $params[] = '%' . $q . '%';
+        }
+        $sql = "SELECT u.id, u.username, u.avatar,
+                    COUNT(s.id) AS story_count,
+                    MAX(s.created_at) AS last_at,
+                    SUM(CASE WHEN sv.id IS NULL THEN 1 ELSE 0 END) AS unseen
+                FROM stories s
+                JOIN users u ON s.user_id = u.id
+                LEFT JOIN story_views sv ON sv.story_id = s.id AND sv.viewer_id = ?
+                WHERE s.expires_at > NOW() $where
+                GROUP BY u.id, u.username, u.avatar
+                ORDER BY (u.id = ?) DESC, unseen > 0 DESC, last_at DESC";
+        // reorder params: viewer_id, [q..], me
+        $bind = [$userId];
+        if ($q !== '') { $bind[] = '%' . $q . '%'; $bind[] = '%' . $q . '%'; }
+        $bind[] = $userId;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($bind);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as &$r) {
+            $r['is_me']     = ((int)$r['id'] === (int)$userId);
+            $r['all_viewed'] = ((int)$r['unseen'] === 0);
+            $r['time_ago']  = storyTimeAgo($r['last_at']);
+        }
+        echo json_encode(['success' => true, 'users' => $rows, 'me' => (int)$userId]);
+        break;
+
     default:
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
 }
