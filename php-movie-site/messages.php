@@ -552,7 +552,7 @@ function sendDmSticker(fileName) {
     fetch(`${window.SITE_URL}/api/messages.php`, {
         method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
         body: JSON.stringify({action:'send', receiver_id: dmChatWith, message: '[sticker:'+fileName+']'})
-    }).then(r=>r.json()).then(d => { if(d.success) { loadThread(dmLastMsgId); dmStickerPicker.style.display='none'; } });
+    }).then(r=>r.json()).then(d => { if(d.success) { loadThread(dmLastMsgId); if (window.CineStickers) CineStickers.close(dmStickerPicker); else dmStickerPicker.style.display='none'; } });
 }
 
 function deleteDmMsg(msgId) {
