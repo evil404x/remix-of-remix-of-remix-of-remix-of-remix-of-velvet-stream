@@ -1084,7 +1084,7 @@ function sendSticker(fileName, name) {
     fetch(`${window.SITE_URL}/api/watch-party.php`, {
         method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
         body: JSON.stringify({action:'chat_send', room_id: ROOM_ID, message: stickerMsg})
-    }).then(r=>r.json()).then(d => { if(d.success) { loadRoomChat(); stickerPicker.style.display = 'none'; } });
+    }).then(r=>r.json()).then(d => { if(d.success) { loadRoomChat(); if (window.CineStickers) CineStickers.close(stickerPicker); else stickerPicker.style.display = 'none'; } });
 }
 
 // ============ LEAVE ============
