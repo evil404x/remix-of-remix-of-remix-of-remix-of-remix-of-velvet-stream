@@ -265,12 +265,9 @@ switch ($action) {
     case 'feed':
         // All users with active stories (me first, then followed users, then the rest)
         $q = trim($_GET['q'] ?? '');
-        $params = [$userId, $userId, $userId];
         $where = '';
         if ($q !== '') {
-            $where = " AND (u.username LIKE ? OR u.full_name LIKE ?) ";
-            $params[] = '%' . $q . '%';
-            $params[] = '%' . $q . '%';
+            $where = " AND u.username LIKE ? ";
         }
         $sql = "SELECT u.id, u.username, u.avatar,
                     COUNT(s.id) AS story_count,
@@ -284,7 +281,7 @@ switch ($action) {
                 ORDER BY (u.id = ?) DESC, unseen > 0 DESC, last_at DESC";
         // reorder params: viewer_id, [q..], me
         $bind = [$userId];
-        if ($q !== '') { $bind[] = '%' . $q . '%'; $bind[] = '%' . $q . '%'; }
+        if ($q !== '') { $bind[] = '%' . $q . '%'; }
         $bind[] = $userId;
         $stmt = $pdo->prepare($sql);
         $stmt->execute($bind);
