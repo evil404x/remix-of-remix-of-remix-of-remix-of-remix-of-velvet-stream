@@ -5346,3 +5346,191 @@ body.no-select {
     -webkit-user-select: none;
     user-select: none;
 }
+
+/* ============================================
+   STICKER PICKER / STUDIO  (.cs-*)
+   ============================================ */
+.cs-picker {
+    background: rgba(10,10,10,0.96);
+    border: 1px solid var(--glass-border-hover);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: var(--shadow-deep);
+    backdrop-filter: blur(var(--glass-blur));
+    max-height: 300px;
+    overflow-y: auto;
+}
+.cs-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.cs-tab {
+    flex: 1; padding: 6px 10px; border-radius: 999px; cursor: pointer;
+    background: rgba(255,255,255,0.04); border: 1px solid transparent;
+    color: var(--gray-light); font-size: 0.75rem; font-family: var(--font-body);
+    transition: var(--transition-fast);
+}
+.cs-tab:hover { color: var(--white); }
+.cs-tab.active { background: var(--gold-subtle); border-color: var(--glass-border-hover); color: var(--gold); }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(66px, 1fr)); gap: 8px; }
+.cs-item {
+    position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 12px; cursor: pointer; padding: 4px; background: rgba(255,255,255,0.03);
+    transition: var(--transition-fast);
+}
+.cs-item:hover { background: var(--gold-subtle); transform: scale(1.08); }
+.cs-item img, .cs-item video { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
+.cs-item [data-cs-del] {
+    position: absolute; top: -4px; inset-inline-end: -4px; width: 20px; height: 20px;
+    border-radius: 50%; border: none; cursor: pointer; font-size: 0.7rem; line-height: 1;
+    background: var(--red); color: #fff; opacity: 0; transition: var(--transition-fast);
+}
+.cs-item:hover [data-cs-del] { opacity: 1; }
+.cs-new {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    aspect-ratio: 1; border-radius: 12px; cursor: pointer; color: var(--gold);
+    background: var(--gold-subtle); border: 1px dashed rgba(245,197,24,0.35);
+    font-size: 0.65rem; text-align: center; transition: var(--transition-fast);
+}
+.cs-new:hover { background: rgba(245,197,24,0.14); transform: scale(1.05); }
+.cs-empty { grid-column: 1/-1; text-align: center; color: var(--gray); font-size: 0.8rem; padding: 18px; }
+
+.cs-studio {
+    position: fixed; inset: 0; z-index: 10050; display: none;
+    align-items: center; justify-content: center; padding: 18px;
+    background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+}
+.cs-studio.open { display: flex; animation: csFade .25s ease; }
+@keyframes csFade { from { opacity: 0 } to { opacity: 1 } }
+.cs-studio-card {
+    width: 100%; max-width: 380px; border-radius: 22px; padding: 18px;
+    background: rgba(14,14,14,0.96); border: 1px solid var(--glass-border-hover);
+    box-shadow: var(--shadow-deep);
+}
+.cs-studio-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.cs-studio-head h3 { color: var(--gold); font-size: 1rem; margin: 0; }
+.cs-studio-close { background: none; border: none; color: var(--gray-light); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+.cs-drop {
+    display: block; border: 1px dashed rgba(245,197,24,0.3); border-radius: 16px;
+    min-height: 160px; cursor: pointer; overflow: hidden; background: rgba(255,255,255,0.02);
+}
+.cs-drop:hover { border-color: var(--gold); }
+.cs-drop-inner {
+    min-height: 160px; display: flex; flex-direction: column; gap: 6px;
+    align-items: center; justify-content: center; color: var(--gray-light); text-align: center; padding: 12px;
+}
+.cs-drop-inner i { font-size: 1.7rem; color: var(--gold); }
+.cs-drop-inner small { color: var(--gray); font-size: 0.68rem; }
+.cs-preview { max-width: 100%; max-height: 200px; object-fit: contain; display: block; margin: 0 auto; }
+.cs-name {
+    width: 100%; margin-top: 12px; padding: 10px 14px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border);
+    color: var(--white); font-family: var(--font-body); font-size: 0.85rem;
+}
+.cs-studio-msg { min-height: 18px; font-size: 0.78rem; margin: 8px 2px; color: var(--gray-light); }
+.cs-studio-msg.err { color: var(--red); }
+.cs-studio-msg.ok { color: var(--green); }
+.cs-save {
+    width: 100%; padding: 12px; border-radius: 14px; border: none; cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #111;
+    font-weight: 700; font-family: var(--font-body); transition: var(--transition-fast);
+}
+.cs-save:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ============================================
+   LIVE CHAT TOAST + QUICK CHAT (.cine-*)
+   ============================================ */
+.cine-toast-layer {
+    position: fixed; top: 14px; inset-inline: 0; z-index: 10060;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    pointer-events: none; padding: 0 12px;
+}
+.cine-toast {
+    pointer-events: auto; width: min(420px, 100%); display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-radius: 18px; cursor: pointer;
+    background: rgba(14,14,14,0.94); border: 1px solid var(--glass-border-hover);
+    box-shadow: var(--shadow-deep); backdrop-filter: blur(var(--glass-blur));
+    transform: translateY(-24px); opacity: 0; transition: var(--transition-bounce);
+}
+.cine-toast.show { transform: translateY(0); opacity: 1; }
+.cine-toast-avatar { position: relative; flex-shrink: 0; }
+.cine-toast-fallback {
+    display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    background: var(--gray-dark); color: var(--gold);
+}
+.cine-toast-dot {
+    position: absolute; bottom: 0; inset-inline-end: 0; width: 11px; height: 11px;
+    border-radius: 50%; background: var(--green); border: 2px solid #0e0e0e;
+}
+.cine-toast-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.cine-toast-body strong { color: var(--gold); font-size: 0.85rem; }
+.cine-toast-body span { color: var(--gray-light); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cine-toast-actions { display: flex; align-items: center; gap: 4px; }
+.cine-toast-actions button {
+    background: none; border: none; cursor: pointer; color: var(--gray-light);
+    font-size: 1rem; padding: 6px; border-radius: 8px; transition: var(--transition-fast);
+}
+.cine-toast-open { color: var(--gold) !important; }
+.cine-toast-actions button:hover { background: rgba(255,255,255,0.06); }
+
+.cine-quickchat {
+    position: fixed; inset: 0; z-index: 10040; display: none;
+    align-items: flex-end; justify-content: center;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+}
+.cine-quickchat.open { display: flex; animation: csFade .2s ease; }
+.cine-qc-card {
+    width: min(430px, 100%); height: min(72vh, 620px); display: flex; flex-direction: column;
+    border-radius: 26px 26px 0 0; overflow: hidden; position: relative;
+    background: rgba(12,12,12,0.97); border: 1px solid var(--glass-border-hover);
+    box-shadow: var(--shadow-deep); animation: qcUp .3s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes qcUp { from { transform: translateY(40px); opacity: .4 } to { transform: translateY(0); opacity: 1 } }
+@media (min-width: 768px) {
+    .cine-quickchat { align-items: center; }
+    .cine-qc-card { border-radius: 26px; }
+}
+.cine-qc-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 16px; border-bottom: 1px solid var(--glass-border);
+    background: linear-gradient(180deg, rgba(245,197,24,0.06), transparent);
+}
+.cine-qc-user { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.cine-qc-user strong { display: block; color: var(--white); font-size: 0.92rem; }
+.cine-qc-user small { color: var(--gray); font-size: 0.72rem; }
+.cine-qc-user small.online { color: var(--green); }
+.cine-qc-head-actions { display: flex; align-items: center; gap: 6px; }
+.cine-qc-head-actions a, .cine-qc-close {
+    background: none; border: none; cursor: pointer; color: var(--gray-light);
+    font-size: 1.05rem; padding: 6px 8px; border-radius: 10px; text-decoration: none;
+}
+.cine-qc-head-actions a:hover, .cine-qc-close:hover { background: rgba(255,255,255,0.06); color: var(--gold); }
+.cine-qc-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.cine-qc-loading { text-align: center; color: var(--gold); padding: 30px; }
+.cine-qc-msg { display: flex; }
+.cine-qc-msg.own { justify-content: flex-start; }
+.cine-qc-msg.other { justify-content: flex-end; }
+.cine-qc-bubble {
+    max-width: 76%; padding: 9px 13px; border-radius: 16px; font-size: 0.87rem;
+    line-height: 1.6; word-break: break-word;
+}
+.cine-qc-msg.own .cine-qc-bubble { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #121212; }
+.cine-qc-msg.other .cine-qc-bubble { background: rgba(255,255,255,0.06); color: var(--white); }
+.cine-qc-msg.sticker .cine-qc-bubble { background: transparent !important; padding: 2px; }
+.cine-qc-sticker-media { width: 130px; height: 130px; object-fit: contain; }
+.cine-qc-sticker-picker { margin: 0 12px; }
+.cine-qc-form {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.35);
+}
+.cine-qc-form input {
+    flex: 1; padding: 11px 16px; border-radius: 999px; color: var(--white);
+    background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+    font-family: var(--font-body); font-size: 0.88rem;
+}
+.cine-qc-form input:focus { outline: none; border-color: var(--glass-border-hover); }
+.cine-qc-sticker {
+    background: none; border: none; color: var(--gold); font-size: 1.15rem; cursor: pointer; padding: 6px;
+}
+.cine-qc-send {
+    width: 42px; height: 42px; flex-shrink: 0; border: none; border-radius: 50%; cursor: pointer;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #121212; font-size: 0.95rem;
+}
+body.cine-qc-open { overflow: hidden; }

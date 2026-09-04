@@ -36,7 +36,7 @@ try {
     })();
     </script>
 </head>
-<body class="rtl">
+<body class="rtl"<?= isLoggedIn() ? ' data-logged-in="1"' : '' ?>>
 
 <!-- Preloader -->
 <div class="preloader">

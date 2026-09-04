@@ -1071,41 +1071,12 @@ if (publicToggle) {
 // ============ STICKER PICKER (supports webm) ============
 const stickerBtn = document.getElementById('room-sticker-btn');
 const stickerPicker = document.getElementById('room-sticker-picker');
-const stickerGrid = document.getElementById('room-sticker-grid');
-let stickersLoaded = false;
-
-if (stickerBtn && stickerPicker) {
-    stickerBtn.addEventListener('click', function() {
-        stickerPicker.style.display = stickerPicker.style.display === 'none' ? 'block' : 'none';
-        if (!stickersLoaded) {
-            fetch(`${window.SITE_URL}/api/sticker.php?action=list`, {credentials:'same-origin'})
-                .then(r=>r.json()).then(d => {
-                    stickersLoaded = true;
-                    if (!d.stickers || d.stickers.length === 0) {
-                        stickerGrid.innerHTML = '<p style="color:var(--gray);font-size:0.8rem;text-align:center;grid-column:1/-1;padding:20px;">هیچ ستیکەرێک نییە</p>';
-                        return;
-                    }
-                    stickerGrid.innerHTML = d.stickers.map(s => {
-                        const isWebm = s.file_name.endsWith('.webm');
-                        if (isWebm) {
-                            return `<video src="${window.SITE_URL}/uploads/stickers/${s.file_name}" 
-                                 title="${s.name}" autoplay loop muted playsinline
-                                 style="width:60px;height:60px;object-fit:contain;cursor:pointer;border-radius:8px;padding:4px;transition:all 0.2s;"
-                                 onmouseover="this.style.background='rgba(245,197,24,0.1)';this.style.transform='scale(1.15)'"
-                                 onmouseout="this.style.background='';this.style.transform=''"
-                                 onclick="sendSticker('${s.file_name}','${s.name}')"></video>`;
-                        }
-                        return `<img src="${window.SITE_URL}/uploads/stickers/${s.file_name}" 
-                             alt="${s.name}" title="${s.name}"
-                             style="width:60px;height:60px;object-fit:contain;cursor:pointer;border-radius:8px;transition:all 0.2s;padding:4px;"
-                             onmouseover="this.style.background='rgba(245,197,24,0.1)';this.style.transform='scale(1.15)'"
-                             onmouseout="this.style.background='';this.style.transform=''"
-                             onclick="sendSticker('${s.file_name}','${s.name}')">`;
-                    }).join('');
-                });
-        }
+if (stickerBtn && stickerPicker && window.CineStickers) {
+    CineStickers.attach({
+        btn: stickerBtn,
+        picker: stickerPicker,
+        onSelect: file => sendSticker(file)
     });
-    document.addEventListener('click', e => { if (!e.target.closest('#room-sticker-picker') && !e.target.closest('#room-sticker-btn')) stickerPicker.style.display = 'none'; });
 }
 
 function sendSticker(fileName, name) {
@@ -1113,7 +1084,7 @@ function sendSticker(fileName, name) {
     fetch(`${window.SITE_URL}/api/watch-party.php`, {
         method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
         body: JSON.stringify({action:'chat_send', room_id: ROOM_ID, message: stickerMsg})
-    }).then(r=>r.json()).then(d => { if(d.success) { loadRoomChat(); stickerPicker.style.display = 'none'; } });
+    }).then(r=>r.json()).then(d => { if(d.success) { loadRoomChat(); if (window.CineStickers) CineStickers.close(stickerPicker); else stickerPicker.style.display = 'none'; } });
 }
 
 // ============ LEAVE ============
