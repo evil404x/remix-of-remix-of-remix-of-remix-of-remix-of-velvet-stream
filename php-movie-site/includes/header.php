@@ -98,9 +98,11 @@ try {
             <li><a href="<?= SITE_URL ?>/search.php?type=series"><i class="fas fa-tv"></i> زنجیرەکان</a></li>
             <li><a href="<?= SITE_URL ?>/request.php"><i class="fas fa-plus-circle"></i> داواکردنی فیلم</a></li>
             <?php if (isLoggedIn()): ?>
+            <li><a href="<?= SITE_URL ?>/stories.php"><i class="fas fa-circle-play"></i> ستۆریەکان</a></li>
             <li class="nav-mobile-only"><a href="<?= SITE_URL ?>/messages.php"><i class="fas fa-envelope"></i> نامەکان</a></li>
                 <li class="nav-mobile-only"><a href="<?= SITE_URL ?>/profile.php"><i class="fas fa-user-circle"></i> پرۆفایل</a></li>
                 <li class="nav-mobile-only"><a href="<?= SITE_URL ?>/favorites.php"><i class="fas fa-heart"></i> دڵخوازەکان</a></li>
+
                 <?php if (isAdmin()): ?>
                     <li class="nav-mobile-only"><a href="<?= adminUrl() ?>"><i class="fas fa-crown"></i> پانێڵی ئادمین</a></li>
                 <?php endif; ?>
