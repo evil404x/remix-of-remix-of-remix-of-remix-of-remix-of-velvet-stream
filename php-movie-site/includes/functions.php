@@ -187,7 +187,7 @@ function generateMeta(array $movie): string {
     $title = clean($movie['meta_title'] ?: $movie['title'] . ' | ' . SITE_NAME);
     $desc = clean($movie['meta_description'] ?: mb_substr($movie['description'] ?? '', 0, 160));
     $poster = SITE_URL . '/uploads/posters/' . ($movie['poster'] ?? 'default.jpg');
-    $url = SITE_URL . '/movie/' . $movie['slug'];
+    $url = SITE_URL . '/movie.php?slug=' . $movie['slug'];
     
     $schema = json_encode([
         "@context" => "https://schema.org",
@@ -383,7 +383,7 @@ function parseActors(string $actorsStr): array {
 // ============ ENHANCED SEO ============
 function generateMovieSchema(array $movie): string {
     $poster = SITE_URL . '/uploads/posters/' . ($movie['poster'] ?? 'default.jpg');
-    $url = SITE_URL . '/movie/' . $movie['slug'];
+    $url = SITE_URL . '/movie.php?slug=' . $movie['slug'];
     
     $schema = [
         "@context" => "https://schema.org",

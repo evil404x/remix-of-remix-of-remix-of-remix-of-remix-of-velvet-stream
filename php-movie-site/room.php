@@ -475,7 +475,7 @@ body:has(.room-page) .smart-hub-bubble { display: none !important; }
     <!-- Top Bar -->
     <div class="room-topbar">
         <div class="room-topbar-left">
-            <a href="<?= SITE_URL ?>/movie/<?= $room['slug'] ?>" class="room-back"><i class="fas fa-arrow-right"></i></a>
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $room['slug'] ?>" class="room-back"><i class="fas fa-arrow-right"></i></a>
             <div class="room-movie-info">
                 <img src="<?= SITE_URL ?>/uploads/posters/<?= $room['poster'] ?: 'default.jpg' ?>" class="room-movie-poster" alt="">
                 <div>
@@ -1092,7 +1092,7 @@ document.getElementById('room-leave-btn').addEventListener('click', function() {
     fetch(`${window.SITE_URL}/api/watch-party.php`, {
         method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
         body: JSON.stringify({action:'leave', room_id: ROOM_ID})
-    }).then(() => { window.location.href = `${window.SITE_URL}/movie/<?= $room['slug'] ?>`; });
+    }).then(() => { window.location.href = `${window.SITE_URL}/movie.php?slug=<?= $room['slug'] ?>`; });
 });
 
 // ============ INVITE MODAL ============

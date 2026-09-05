@@ -19,8 +19,9 @@ define('DB_NAME', 'cinegold_db');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
-// ============ ADMIN FOLDER NAME (SECRET) ============
-define('ADMIN_DIR', 'ShahCinema_Vault_2026');
+// ============ ADMIN FOLDER NAME (auto-detect) ============
+define('ADMIN_DIR', is_dir(__DIR__ . '/ShahCinema_Vault_2026') ? 'ShahCinema_Vault_2026' : 'admin');
+
 
 // Dynamic Site URL Detection
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';

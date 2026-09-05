@@ -60,7 +60,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div class="hero-actions">
                 <?php if (!empty($slide['slug'])): ?>
-                <a href="<?= SITE_URL ?>/movie/<?= $slide['slug'] ?>" class="btn btn-gold btn-lg">
+                <a href="<?= SITE_URL ?>/movie.php?slug=<?= $slide['slug'] ?>" class="btn btn-gold btn-lg">
                     <i class="fas fa-play"></i> سەیرکردن
                 </a>
                 <?php elseif (!empty($slide['link'])): ?>
@@ -152,10 +152,10 @@ require_once __DIR__ . '/includes/header.php';
             <?php endif; ?>
         </div>
         <div class="hero-actions">
-            <a href="<?= SITE_URL ?>/movie/<?= $hero['slug'] ?>" class="btn btn-gold btn-lg">
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $hero['slug'] ?>" class="btn btn-gold btn-lg">
                 <i class="fas fa-play"></i> سەیرکردن
             </a>
-            <a href="<?= SITE_URL ?>/movie/<?= $hero['slug'] ?>#trailer" class="btn btn-glass btn-lg">
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $hero['slug'] ?>#trailer" class="btn btn-glass btn-lg">
                 <i class="fas fa-film"></i> تریلەر
             </a>
         </div>
@@ -227,7 +227,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="movies-grid">
             <?php foreach ($latestMovies as $movie): ?>
-            <a href="<?= SITE_URL ?>/movie/<?= $movie['slug'] ?>" class="movie-card">
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $movie['slug'] ?>" class="movie-card">
                 <div class="poster">
                     <img src="<?= SITE_URL ?>/uploads/posters/<?= $movie['poster'] ?: 'default.jpg' ?>" alt="<?= clean($movie['title']) ?>" loading="lazy">
                     <div class="overlay">
@@ -265,7 +265,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="movies-grid">
             <?php foreach ($latestSeries as $series): ?>
-            <a href="<?= SITE_URL ?>/movie/<?= $series['slug'] ?>" class="movie-card">
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $series['slug'] ?>" class="movie-card">
                 <div class="poster">
                     <img src="<?= SITE_URL ?>/uploads/posters/<?= $series['poster'] ?: 'default.jpg' ?>" alt="<?= clean($series['title']) ?>" loading="lazy">
                     <div class="overlay">

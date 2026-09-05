@@ -95,7 +95,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         <div class="movies-grid">
             <?php foreach ($movies as $m): ?>
-            <a href="<?= SITE_URL ?>/movie/<?= $m['slug'] ?>" class="movie-card">
+            <a href="<?= SITE_URL ?>/movie.php?slug=<?= $m['slug'] ?>" class="movie-card">
                 <div class="poster">
                     <img src="<?= SITE_URL ?>/uploads/posters/<?= $m['poster'] ?: 'default.jpg' ?>" alt="<?= clean($m['title']) ?>" loading="lazy">
                     <div class="overlay">
