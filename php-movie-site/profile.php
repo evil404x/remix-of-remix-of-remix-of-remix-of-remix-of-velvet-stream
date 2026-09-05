@@ -708,9 +708,12 @@ fetch(`${window.SITE_URL}/api/stories.php?action=has_story&user_id=<?= $viewingU
 function handleAvatarClick() {
     fetch(`${window.SITE_URL}/api/stories.php?action=get_user_stories&user_id=<?= $viewingUserId ?>`, {credentials:'same-origin'})
         .then(r=>r.json()).then(d => {
-            if (d.success && d.stories.length > 0) { currentStories = d.stories; currentStoryIndex = 0; openStoryViewer(); }
+            if (d.success && d.stories.length > 0) {
+                window.location.href = `${window.SITE_URL}/stories.php?user=<?= $viewingUserId ?>`;
+            }
         });
 }
+
 
 function openStoryViewer() { document.getElementById('story-viewer-overlay').style.display = 'flex'; document.body.style.overflow = 'hidden'; showStory(currentStoryIndex); }
 function closeStoryViewer() { document.getElementById('story-viewer-overlay').style.display = 'none'; document.body.style.overflow = ''; clearTimeout(storyTimer); }
