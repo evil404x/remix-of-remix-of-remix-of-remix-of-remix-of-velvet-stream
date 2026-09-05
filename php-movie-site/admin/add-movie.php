@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $reqStmt = $pdo->prepare("SELECT user_id FROM movie_requests WHERE movie_name LIKE ? AND user_id IS NOT NULL AND status = 'pending'");
             $reqStmt->execute(['%' . $title . '%']);
             foreach ($reqStmt->fetchAll() as $req) {
-                sendNotification($pdo, $req['user_id'], 'فیلمەکەت دانرا! 🎬', "فیلمی «{$title}» لە سایتەکەوە بەردەستە.", SITE_URL . "/movie/{$slug}");
+                sendNotification($pdo, $req['user_id'], 'فیلمەکەت دانرا! 🎬', "فیلمی «{$title}» لە سایتەکەوە بەردەستە.", SITE_URL . "/movie.php?slug={$slug}");
             }
             $pdo->prepare("UPDATE movie_requests SET status = 'completed' WHERE movie_name LIKE ? AND status = 'pending'")->execute(['%' . $title . '%']);
 

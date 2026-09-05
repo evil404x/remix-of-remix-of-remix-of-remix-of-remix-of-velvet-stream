@@ -95,7 +95,7 @@ $seoSchema = generateMovieSchema($movie);
 $seoTitle = clean($movie['meta_title'] ?: $movie['title'] . ' | ' . SITE_NAME);
 $seoDesc = clean($movie['meta_description'] ?: mb_substr($movie['description'] ?? '', 0, 160));
 $seoPoster = SITE_URL . '/uploads/posters/' . ($movie['poster'] ?? 'default.jpg');
-$seoUrl = SITE_URL . '/movie/' . $movie['slug'];
+$seoUrl = SITE_URL . '/movie.php?slug=' . $movie['slug'];
 ?>
 
 <!-- SEO Meta -->
@@ -374,7 +374,7 @@ $seoUrl = SITE_URL . '/movie/' . $movie['slug'];
     <h2 class="mv-section-heading"><i class="fas fa-fire"></i> فیلمە هاوشێوەکان</h2>
     <div class="movies-grid">
         <?php foreach ($suggested as $si => $s): ?>
-        <a href="<?= SITE_URL ?>/movie/<?= $s['slug'] ?>" class="movie-card" style="animation-delay:<?= ($si * 0.06) ?>s">
+        <a href="<?= SITE_URL ?>/movie.php?slug=<?= $s['slug'] ?>" class="movie-card" style="animation-delay:<?= ($si * 0.06) ?>s">
             <div class="poster">
                 <img src="<?= SITE_URL ?>/uploads/posters/<?= $s['poster'] ?: 'default.jpg' ?>" alt="<?= clean($s['title']) ?>" loading="lazy">
                 <div class="overlay"><div class="play-btn"><i class="fas fa-play"></i></div></div>
