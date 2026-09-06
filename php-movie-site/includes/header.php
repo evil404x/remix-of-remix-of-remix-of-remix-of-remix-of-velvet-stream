@@ -24,6 +24,7 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script>window.SITE_URL = '<?= SITE_URL ?>';</script>
+    <script src="<?= SITE_URL ?>/assets/js/stickers.js?v=<?= filemtime(__DIR__ . '/../assets/js/stickers.js') ?>"></script>
     <script>
     (function(){
         var CACHE_VERSION = '<?= filemtime(__DIR__ . '/../assets/css/style.css') . filemtime(__DIR__ . '/../assets/js/main.js') ?>';
