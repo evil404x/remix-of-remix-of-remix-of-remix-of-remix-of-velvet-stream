@@ -22,6 +22,7 @@
         <li><a href="<?= adminUrl('user-reports.php') ?>" class="<?= basename($_SERVER['PHP_SELF'])==='user-reports.php'?'active':'' ?>"><i class="fas fa-exclamation-triangle"></i> ڕاپۆرتی بەکارهێنەر</a></li>
         <li><a href="<?= adminUrl('stickers.php') ?>" class="<?= basename($_SERVER['PHP_SELF'])==='stickers.php'?'active':'' ?>"><i class="fas fa-smile"></i> ستیکەرەکان</a></li>
         <li><a href="<?= adminUrl('code-editor.php') ?>" class="<?= basename($_SERVER['PHP_SELF'])==='code-editor.php'?'active':'' ?>"><i class="fas fa-code"></i> دەستکاری کۆد</a></li>
+        <li><a href="<?= adminUrl('ai-assistant.php') ?>" class="<?= basename($_SERVER['PHP_SELF'])==='ai-assistant.php'?'active':'' ?>"><i class="fas fa-robot"></i> یاریدەدەری AI</a></li>
         <li><a href="<?= adminUrl('settings.php') ?>" class="<?= basename($_SERVER['PHP_SELF'])==='settings.php'?'active':'' ?>"><i class="fas fa-cog"></i> ڕێکخستنەکان</a></li>
         <li><a href="<?= SITE_URL ?>"><i class="fas fa-globe"></i> بینینی سایت</a></li>
         <li><a href="<?= SITE_URL ?>/logout.php"><i class="fas fa-sign-out-alt"></i> چوونەدەرەوە</a></li>
